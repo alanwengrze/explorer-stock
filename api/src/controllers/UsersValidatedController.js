@@ -1,0 +1,18 @@
+const knex = require("../database/knex");
+const AppError = require("../utils/AppError");
+
+class UsersValidatedController {
+  async index(request, response) {
+    const user_id = request.user.id
+
+    const checkUserExists = await knex("users").where({ id: user_id });
+
+    if (checkUserExists.length === 0) {
+      throw new AppError("User does not exists.", 401);
+    }
+
+    return response.status(200).json();
+  }
+}
+
+module.exports = UsersValidatedController;
